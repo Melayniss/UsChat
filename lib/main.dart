@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';//add this new line；step2
 
@@ -152,3 +153,33 @@ class RandomWordsState extends State<RandomWords>{
   }
 //在类中直接添加方法
 }//step3
+*/
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(new MyApp());
+
+class MyApp extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    return new MaterialApp(
+      title: 'Let Us Chat',
+      theme: new ThemeData(
+        primaryColor: Colors.white,
+      ),
+      home: new PageCount(),
+    );
+  }
+}
+
+class PageCount extends StatefulWidget{
+  @override
+  PageOne createState() => new PageOne();
+  PageTwo createState() => new PageTwo();
+  PageThree createState() => new PageThree;
+  PageFour create
+}
+
+class PageOne extends PageCount{
+
+}
