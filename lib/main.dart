@@ -176,14 +176,15 @@ class MyApp extends StatelessWidget{
 class PageCount extends StatefulWidget{
   @override
   PageOne createState() => new PageOne();
-  PageTwo createState() => new PageTwo();
-  PageThree createState() => new PageThree();
-  PageFour createState() => new PageFour();
+  //PageTwo createState() => new PageTwo();
+  //PageThree createState() => new PageThree();
+  //PageFour createState() => new PageFour();
 }
 
 class PageOne extends State<PageCount>{
   final List<WordPair> _Friends = <WordPair>[];
   final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
+  final TextStyle _searchFont = const TextStyle(fontSize: 18.0,color: Colors.grey);
 
   @override
   Widget build(BuildContext context) {
@@ -193,11 +194,15 @@ class PageOne extends State<PageCount>{
         //导航栏显示文字，设置靠左；
 
         actions: <Widget>[
-          new IconButton(icon: const Icon(Icons.search), onPressed: _Search),
-          //new IconButton(icon: const Icon(Icons.add), onPressed: _multiple)
+          new IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: _Search,
+            alignment: Alignment.centerLeft,
+          ),
           new PopupMenuButton(
+            icon: new Icon(Icons.add_circle),
               itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                PopupMenuItem(
+                new PopupMenuItem(
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -205,14 +210,68 @@ class PageOne extends State<PageCount>{
                       new Text('New Chat')
                     ],
                   ),
+                ),
+                new PopupMenuItem(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Icon(Icons.contacts),
+                      new Text('Add Contacts')
+                    ],
+                  ),
+                ),
+                new PopupMenuItem(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Icon(Icons.scanner),
+                      new Text('Scan')
+                    ],
+                  ),
+                ),
+                new PopupMenuItem(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Icon(Icons.payment),
+                      new Text('Money')
+                    ],
+                  ),
+                ),
+                new PopupMenuItem(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Icon(Icons.mail),
+                      new Text('Support')
+                    ],
+                  ),
                 )
               ]
           )
         ],
-        //添加两个actions，其中包含一个icon，以及点击icon触发的页面跳转；step 7
-
       ),
       body: _buildFriends(),
+      bottomNavigationBar: new BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          new BottomNavigationBarItem(
+            icon: getIcons(0),
+            title: getTitles(0)
+          ),
+          new BottomNavigationBarItem(
+              icon: getIcons(1),
+              title: getTitles(1)
+          ),
+          new BottomNavigationBarItem(
+              icon: getIcons(2),
+              title: getTitles(2)
+          ),
+          new BottomNavigationBarItem(
+              icon: getIcons(3),
+              title: getTitles(3)
+          )
+        ],
+      ),
     );
   }
 
@@ -251,9 +310,70 @@ class PageOne extends State<PageCount>{
         //style属性的值设为之前声明的biggerFont变量改变字号大小；step4
       ),
       subtitle: new Text('Your friend $friendsName send you a message'),
-      onLongPress: ,
+      onTap: _onTap,
+      onLongPress: _onLongPress,
       },
     );
   }
+
+  void _Search(){
+    Navigator.of(context).push(
+      //表示添加在导航栏部分添加 Navigator.push 调用，实现路由入栈（以后路由入栈均指推入到导航管理器的栈）；step7
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context){
+          //在push调用中新建MaterialPageRoute 及其 builder（构造器）；
+          return new Scaffold(
+            appBar: new AppBar(
+              leading: Icon(Icons.search,color: Colors.grey),
+              title: new Text(
+                'Search...',
+                textAlign: TextAlign.left,
+                style: _searchFont,
+              ),
+              //名为"Saved Suggestions"的新路由的应用栏;step7
+
+            ),
+            body: new ListView(
+              children: divided,
+              //body 中的children为divided，divided 包含 ListTiles 行的 ListView 和每行之间的分隔线；step7
+            ),
+          );
+          //builder 返回一个 Scaffold；step7
+        },
+      ),
+    );
+  }
+
+  void _onTap(){
+    Navigator.of(context).push(
+      //表示添加在导航栏部分添加 Navigator.push 调用，实现路由入栈（以后路由入栈均指推入到导航管理器的栈）；step7
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context){
+          //在push调用中新建MaterialPageRoute 及其 builder（构造器）；
+          return new Scaffold(
+            appBar: new AppBar(
+              leading: Icon(Icons.picture_in_picture),
+              title: new Text(
+                $friendsName+'(2)',
+                textAlign: TextAlign.left,
+                style: _searchFont,
+              ),
+              //名为"Saved Suggestions"的新路由的应用栏;step7
+
+            ),
+            body: new ListView(
+              children: divided,
+              //body 中的children为divided，divided 包含 ListTiles 行的 ListView 和每行之间的分隔线；step7
+            ),
+          );
+          //builder 返回一个 Scaffold；step7
+        },
+      ),
+    );
+  }
+
+  void getIcons(Index){}
+
+  void get
 
 }
