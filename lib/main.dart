@@ -42,7 +42,7 @@ class RandomWordsState extends State<RandomWords>{
         actions: <Widget>[
           new IconButton(icon: const Icon(Icons.list), onPressed: _pushSaved)
         ],
-        //添加一个actions，其中包含一个icon，以及点击icon触发的压面跳转；step 7
+        //添加一个actions，其中包含一个icon，以及点击icon触发的页面跳转；step 7
 
       ),
       body: _buildSuggestions(),
@@ -156,6 +156,7 @@ class RandomWordsState extends State<RandomWords>{
 */
 
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
 
 void main() => runApp(new MyApp());
 
@@ -176,10 +177,83 @@ class PageCount extends StatefulWidget{
   @override
   PageOne createState() => new PageOne();
   PageTwo createState() => new PageTwo();
-  PageThree createState() => new PageThree;
-  PageFour create
+  PageThree createState() => new PageThree();
+  PageFour createState() => new PageFour();
 }
 
-class PageOne extends PageCount{
+class PageOne extends State<PageCount>{
+  final List<WordPair> _Friends = <WordPair>[];
+  final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('UsChat(2)',textAlign: TextAlign.left),
+        //导航栏显示文字，设置靠左；
+
+        actions: <Widget>[
+          new IconButton(icon: const Icon(Icons.search), onPressed: _Search),
+          //new IconButton(icon: const Icon(Icons.add), onPressed: _multiple)
+          new PopupMenuButton(
+              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                PopupMenuItem(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Icon(Icons.chat),
+                      new Text('New Chat')
+                    ],
+                  ),
+                )
+              ]
+          )
+        ],
+        //添加两个actions，其中包含一个icon，以及点击icon触发的页面跳转；step 7
+
+      ),
+      body: _buildFriends(),
+    );
+  }
+
+  Widget _buildFriends(){
+    return new ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemBuilder: (BuildContext _context, int i){
+          //BuildContext类型的context私有变量以及int型的i变量；step4
+          //在每一列之前，添加一个1像素高的分隔线widget；step4
+          if(i.isOdd){
+            return new Divider();
+            //新的方法前一定要用new声明；step4
+            //偶数行时，单词对将被添加一个 ListTile row；step4
+          }
+          final int index = i ~/ 2;//即 (int)(i/2)；step4
+
+          if(index >= _Friends.length){
+            //如果滑到了最底部，此时分割线的索引大于等于了Friends List中的单词对数目，则继续生成单词对；step4
+            new Text('No more to show');
+          }
+          return _buildRow(_Friends[index]);
+          //将每个单词对都经过buildRow的处理后再输出；step4
+        }
+    );
+  }
+
+  Widget _buildRow(WordPair friendsName){
+    return new ListTile(
+      leading: Icon(
+        Icons.picture_in_picture,
+      ),
+      title: new Text(
+        friendsName.asPascalCase,
+        //生成的单词对要进行大驼峰式命名法美化；step4
+        style: _biggerFont,
+        //style属性的值设为之前声明的biggerFont变量改变字号大小；step4
+      ),
+      subtitle: new Text('Your friend $friendsName send you a message'),
+      onLongPress: ,
+      },
+    );
+  }
 
 }
