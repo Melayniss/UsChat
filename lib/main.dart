@@ -184,8 +184,6 @@ class PageCount extends StatefulWidget{
 class PageOne extends State<PageCount>{
   final List<WordPair> _friends = <WordPair>[];
   final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
-  final TextStyle _onSearchFont = const TextStyle(fontSize: 18.0,color: Colors.grey);
-  //final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _controller = new TextEditingController();
   int _selectIndex = 0;
 
@@ -210,7 +208,11 @@ class PageOne extends State<PageCount>{
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      new Icon(Icons.chat),
+                      new IconButton(
+                        icon: new Icon(Icons.chat),
+                        //onPressed: ,
+                      ),
+                      new Divider(height: 0,indent: 5.0),
                       new Text('New Chat')
                     ],
                   ),
@@ -219,7 +221,8 @@ class PageOne extends State<PageCount>{
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      new Icon(Icons.contacts),
+                      new IconButton(icon: new Icon(Icons.contacts)),
+                      new Divider(height: 0,indent: 5.0),
                       new Text('Add Contacts')
                     ],
                   ),
@@ -228,7 +231,11 @@ class PageOne extends State<PageCount>{
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      new Icon(Icons.scanner),
+                      new IconButton(
+                        icon: new Icon(Icons.scanner),
+                        //onPressed: ,
+                      ),
+                      new Divider(height: 0,indent: 5.0),
                       new Text('Scan')
                     ],
                   ),
@@ -237,7 +244,11 @@ class PageOne extends State<PageCount>{
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      new Icon(Icons.payment),
+                      new IconButton(
+                        icon: new Icon(Icons.payment),
+                        //onPressed: ,
+                      ),
+                      new Divider(height: 0,indent: 5.0),
                       new Text('Money')
                     ],
                   ),
@@ -246,7 +257,8 @@ class PageOne extends State<PageCount>{
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      new Icon(Icons.mail),
+                      new IconButton(icon: new Icon(Icons.mail)),
+                      new Divider(height: 0,indent: 5.0),
                       new Text('Support'),
                     ],
                   ),
@@ -338,13 +350,52 @@ class PageOne extends State<PageCount>{
           //在push调用中新建MaterialPageRoute 及其 builder（构造器）；
           return new Scaffold(
             appBar: new AppBar(
-              title: new Text(
+              title: new Container(
+                child: new Row(
+                  //不知道为啥不显示；bug
+                  children: <Widget>[
+                    new TextField(
+                      keyboardType: TextInputType.text,
+                      controller: _controller,
+                      cursorColor: Colors.black,
+                      decoration: new InputDecoration(
+                        border: new OutlineInputBorder(  //添加边框
+                          gapPadding: 10.0,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        hintText: 'Search...',
+                        suffixIcon: new IconButton(
+                          icon: new Icon(Icons.send),
+                          onPressed: (){
+                            showDialog(
+                                context: context,
+                                child: new AlertDialog(
+                                  content: new Text(_controller.text),
+                                )
+                            );
+                          },
+                        ),
+                        contentPadding: const EdgeInsets.all(15.0),
+                      ),
+                      //onSubmitted: ,
+                      textInputAction: TextInputAction.done,
+                    )
+                  ],
+                ),
+              )
+              /*new Text(
                 'Search...',
-                textAlign: TextAlign.left,
-                style: _onSearchFont,
+                textAlign: TextAlign.left
+              ),*/
+            ),
+            body: new Container(
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+
+                ],
               ),
             ),
-            //body:
             bottomNavigationBar: new Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -360,29 +411,21 @@ class PageOne extends State<PageCount>{
                     hintText: 'Search...',
                     suffixIcon: new IconButton(
                       icon: new Icon(Icons.send),
-                      //onPressed: _handleSubmitted(_controller.text),
+                      onPressed: (){
+                        showDialog(
+                          context: context,
+                          child: new AlertDialog(
+                            content: new Text(_controller.text),
+                          )
+                        );
+                      },
                     ),
-                    contentPadding: const EdgeInsets.all(15.0)
+                    contentPadding: const EdgeInsets.all(15.0),
                   ),
                   //onSubmitted: ,
                   textInputAction: TextInputAction.done,
                 ),
-
-                /*new RaisedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      child: new AlertDialog(
-                        content: new Text(_controller.text),
-                      ),
-                    );
-                  },
-                  child: new Text(
-                    'Search',
-                    textAlign: TextAlign.right,
-                  ),
-                ),*/
-
+                new Divider(height: 24.0,color: Colors.white)
               ],
             ),
           );
@@ -391,15 +434,4 @@ class PageOne extends State<PageCount>{
       ),
     );
   }
-
-  /*void _handleSubmitted(String text) {
-    _controller.clear();
-    ChatMessage message = new ChatMessage(
-      text: text,
-    );
-    setState((){
-      _messages.insert(0, message);
-    });
-  }*/
-
 }
