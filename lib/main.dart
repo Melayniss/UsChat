@@ -320,7 +320,6 @@ class PageOne extends State<PageCount>{
             new Text('No more to show');
           }
           return _buildRow(_friends[index]);
-          //将每个单词对都经过buildRow的处理后再输出；step4
         }
     );
   }
@@ -429,7 +428,6 @@ class PageOne extends State<PageCount>{
               ],
             ),
           );
-          //builder 返回一个 Scaffold；step7
         },
       ),
     );
