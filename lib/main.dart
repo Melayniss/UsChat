@@ -269,35 +269,56 @@ class PageOne extends State<PageCount>{
       ),
       body: _buildFriends(),
       bottomNavigationBar: new BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           new BottomNavigationBarItem(
             icon: new Icon(Icons.chat_bubble_outline,color: Colors.black,),
             activeIcon: new Icon(Icons.chat_bubble,color: Colors.green),
-            title: new Text('Chats'),
+            title: new Text(
+              'Chats',
+              style: TextStyle(
+                  color: Colors.black
+              ),
+            ),
           ),
           new BottomNavigationBarItem(
               icon: new Icon(Icons.contacts,color: Colors.black),
               activeIcon: new Icon(Icons.contacts,color: Colors.green,),
-              title: new Text('Contacts')
+              title: new Text(
+                'Contacts',
+                style: TextStyle(
+                    color: Colors.black
+                ),
+              )
           ),
           new BottomNavigationBarItem(
               icon: new Icon(Icons.star_border,color: Colors.black),
               activeIcon: new Icon(Icons.star,color: Colors.green),
-              title: new Text('Discover')
+              title: new Text(
+                'Discover',
+                style: TextStyle(
+                    color: Colors.black
+                ),
+              )
           ),
           new BottomNavigationBarItem(
               icon: new Icon(Icons.bookmark_border,color: Colors.black),
               activeIcon: new Icon(Icons.bookmark,color: Colors.green),
-              title: new Text('Me')
+              title: new Text(
+                'Me',
+                style: TextStyle(
+                  color: Colors.black
+                ),
+              )
           )
         ],
-          currentIndex: _selectIndex,
-          onTap: (index) {
-            setState(() {
-              _selectIndex = index;
-            });
-          },
-          fixedColor: Colors.green,
+        currentIndex: _selectIndex,
+        onTap: (index) {
+          setState(() {
+            _selectIndex = index;
+          });
+        },
+        fixedColor: Colors.green
       ),
     );
   }
