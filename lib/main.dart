@@ -182,9 +182,12 @@ class PageCount extends StatefulWidget{
 }
 
 class PageOne extends State<PageCount>{
-  final List<WordPair> _Friends = <WordPair>[];
+  final List<WordPair> _friends = <WordPair>[];
   final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
-  final TextStyle _searchFont = const TextStyle(fontSize: 18.0,color: Colors.grey);
+  final TextStyle _onSearchFont = const TextStyle(fontSize: 18.0,color: Colors.grey);
+  //final List<ChatMessage> _messages = <ChatMessage>[];
+  final TextEditingController _controller = new TextEditingController();
+  int _selectIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -196,15 +199,16 @@ class PageOne extends State<PageCount>{
         actions: <Widget>[
           new IconButton(
             icon: const Icon(Icons.search),
-            onPressed: _Search,
-            alignment: Alignment.centerLeft,
+            iconSize: 16,
+            onPressed: _onSearch,
+            alignment: Alignment.centerRight
           ),
           new PopupMenuButton(
-            icon: new Icon(Icons.add_circle),
+            icon: new Icon(Icons.add_circle,size: 16),
               itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                 new PopupMenuItem(
                   child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       new Icon(Icons.chat),
                       new Text('New Chat')
@@ -213,7 +217,7 @@ class PageOne extends State<PageCount>{
                 ),
                 new PopupMenuItem(
                   child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       new Icon(Icons.contacts),
                       new Text('Add Contacts')
@@ -222,7 +226,7 @@ class PageOne extends State<PageCount>{
                 ),
                 new PopupMenuItem(
                   child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       new Icon(Icons.scanner),
                       new Text('Scan')
@@ -231,7 +235,7 @@ class PageOne extends State<PageCount>{
                 ),
                 new PopupMenuItem(
                   child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       new Icon(Icons.payment),
                       new Text('Money')
@@ -240,10 +244,10 @@ class PageOne extends State<PageCount>{
                 ),
                 new PopupMenuItem(
                   child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       new Icon(Icons.mail),
-                      new Text('Support')
+                      new Text('Support'),
                     ],
                   ),
                 )
@@ -255,22 +259,33 @@ class PageOne extends State<PageCount>{
       bottomNavigationBar: new BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           new BottomNavigationBarItem(
-            icon: getIcons(0),
-            title: getTitles(0)
+            icon: new Icon(Icons.chat_bubble_outline,color: Colors.black,),
+            activeIcon: new Icon(Icons.chat_bubble,color: Colors.green),
+            title: new Text('Chats'),
           ),
           new BottomNavigationBarItem(
-              icon: getIcons(1),
-              title: getTitles(1)
+              icon: new Icon(Icons.contacts,color: Colors.black),
+              activeIcon: new Icon(Icons.contacts,color: Colors.green,),
+              title: new Text('Contacts')
           ),
           new BottomNavigationBarItem(
-              icon: getIcons(2),
-              title: getTitles(2)
+              icon: new Icon(Icons.star_border,color: Colors.black),
+              activeIcon: new Icon(Icons.star,color: Colors.green),
+              title: new Text('Discover')
           ),
           new BottomNavigationBarItem(
-              icon: getIcons(3),
-              title: getTitles(3)
+              icon: new Icon(Icons.bookmark_border,color: Colors.black),
+              activeIcon: new Icon(Icons.bookmark,color: Colors.green),
+              title: new Text('Me')
           )
         ],
+          currentIndex: _selectIndex,
+          onTap: (index) {
+            setState(() {
+              _selectIndex = index;
+            });
+          },
+          fixedColor: Colors.green,
       ),
     );
   }
@@ -288,11 +303,11 @@ class PageOne extends State<PageCount>{
           }
           final int index = i ~/ 2;//即 (int)(i/2)；step4
 
-          if(index >= _Friends.length){
+          if(index >= _friends.length){
             //如果滑到了最底部，此时分割线的索引大于等于了Friends List中的单词对数目，则继续生成单词对；step4
             new Text('No more to show');
           }
-          return _buildRow(_Friends[index]);
+          return _buildRow(_friends[index]);
           //将每个单词对都经过buildRow的处理后再输出；step4
         }
     );
@@ -310,13 +325,12 @@ class PageOne extends State<PageCount>{
         //style属性的值设为之前声明的biggerFont变量改变字号大小；step4
       ),
       subtitle: new Text('Your friend $friendsName send you a message'),
-      onTap: _onTap,
-      onLongPress: _onLongPress,
-      },
+      //onTap: _onTap,
+      //onLongPress: _onLongPress,
     );
   }
 
-  void _Search(){
+  void _onSearch(){
     Navigator.of(context).push(
       //表示添加在导航栏部分添加 Navigator.push 调用，实现路由入栈（以后路由入栈均指推入到导航管理器的栈）；step7
       new MaterialPageRoute<void>(
@@ -324,18 +338,52 @@ class PageOne extends State<PageCount>{
           //在push调用中新建MaterialPageRoute 及其 builder（构造器）；
           return new Scaffold(
             appBar: new AppBar(
-              leading: Icon(Icons.search,color: Colors.grey),
               title: new Text(
                 'Search...',
                 textAlign: TextAlign.left,
-                style: _searchFont,
+                style: _onSearchFont,
               ),
-              //名为"Saved Suggestions"的新路由的应用栏;step7
-
             ),
-            body: new ListView(
-              children: divided,
-              //body 中的children为divided，divided 包含 ListTiles 行的 ListView 和每行之间的分隔线；step7
+            //body:
+            bottomNavigationBar: new Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                new TextField(
+                  keyboardType: TextInputType.text,
+                  controller: _controller,
+                  cursorColor: Colors.black,
+                  decoration: new InputDecoration(
+                    border: new OutlineInputBorder(  //添加边框
+                      gapPadding: 10.0,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    hintText: 'Search...',
+                    suffixIcon: new IconButton(
+                      icon: new Icon(Icons.send),
+                      //onPressed: _handleSubmitted(_controller.text),
+                    ),
+                    contentPadding: const EdgeInsets.all(15.0)
+                  ),
+                  //onSubmitted: ,
+                  textInputAction: TextInputAction.done,
+                ),
+
+                /*new RaisedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      child: new AlertDialog(
+                        content: new Text(_controller.text),
+                      ),
+                    );
+                  },
+                  child: new Text(
+                    'Search',
+                    textAlign: TextAlign.right,
+                  ),
+                ),*/
+
+              ],
             ),
           );
           //builder 返回一个 Scaffold；step7
@@ -344,36 +392,14 @@ class PageOne extends State<PageCount>{
     );
   }
 
-  void _onTap(){
-    Navigator.of(context).push(
-      //表示添加在导航栏部分添加 Navigator.push 调用，实现路由入栈（以后路由入栈均指推入到导航管理器的栈）；step7
-      new MaterialPageRoute<void>(
-        builder: (BuildContext context){
-          //在push调用中新建MaterialPageRoute 及其 builder（构造器）；
-          return new Scaffold(
-            appBar: new AppBar(
-              leading: Icon(Icons.picture_in_picture),
-              title: new Text(
-                $friendsName+'(2)',
-                textAlign: TextAlign.left,
-                style: _searchFont,
-              ),
-              //名为"Saved Suggestions"的新路由的应用栏;step7
-
-            ),
-            body: new ListView(
-              children: divided,
-              //body 中的children为divided，divided 包含 ListTiles 行的 ListView 和每行之间的分隔线；step7
-            ),
-          );
-          //builder 返回一个 Scaffold；step7
-        },
-      ),
+  /*void _handleSubmitted(String text) {
+    _controller.clear();
+    ChatMessage message = new ChatMessage(
+      text: text,
     );
-  }
-
-  void getIcons(Index){}
-
-  void get
+    setState((){
+      _messages.insert(0, message);
+    });
+  }*/
 
 }
