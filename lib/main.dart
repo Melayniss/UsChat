@@ -176,9 +176,6 @@ class MyApp extends StatelessWidget{
 class PageCount extends StatefulWidget{
   @override
   PageOne createState() => new PageOne();
-  //PageTwo createState() => new PageTwo();
-  //PageThree createState() => new PageThree();
-  //PageFour createState() => new PageFour();
 }
 
 class PageOne extends State<PageCount>{
@@ -267,7 +264,9 @@ class PageOne extends State<PageCount>{
           )
         ],
       ),
-      body: _buildFriends(),
+
+      body: _pageOne(),
+
       bottomNavigationBar: new BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
@@ -316,6 +315,7 @@ class PageOne extends State<PageCount>{
         onTap: (index) {
           setState(() {
             _selectIndex = index;
+            _turnToPage(_selectIndex);//网页跳转
           });
         },
         fixedColor: Colors.green
@@ -323,8 +323,37 @@ class PageOne extends State<PageCount>{
     );
   }
 
-  Widget _buildFriends(){
-    return new ListView.builder(
+  Widget _pageOne(){
+    return new Scaffold(
+      body: new Container(
+        color: Colors.white70,
+        child: new Container(
+          child: new ListTile(
+            leading: Icon(
+              Icons.picture_in_picture,
+            ),
+            title: new Text(
+              'Ann',
+              style: _biggerFont,
+            ),
+            subtitle: new Text('When will you come to my house ?'),
+            trailing: new Text(
+              'Yesterday 11:03',
+              textAlign: TextAlign.center,
+              style: new TextStyle(
+                fontSize: 10.0,
+                color: Colors.grey
+              )
+            ),
+            onTap: _onAnnTap,
+            onLongPress: _onLongPress,
+          ),
+
+        )
+      ),
+    );
+
+    /*return new ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (BuildContext _context, int i){
           //BuildContext类型的context私有变量以及int型的i变量；step4
@@ -336,12 +365,74 @@ class PageOne extends State<PageCount>{
           }
           final int index = i ~/ 2;//即 (int)(i/2)；step4
 
-          if(index >= _friends.length){
-            //如果滑到了最底部，此时分割线的索引大于等于了Friends List中的单词对数目，则继续生成单词对；step4
-            new Text('No more to show');
-          }
           return _buildRow(_friends[index]);
         }
+    );*/
+  }
+
+  Widget _pageTwo(){
+    return new Scaffold(
+      body: new Container(
+        color: Colors.white70,
+        child: new ListTile(
+          leading: Icon(
+            Icons.picture_in_picture,
+          ),
+          title: new Text(
+            'Ann',
+            //生成的单词对要进行大驼峰式命名法美化；step4
+            style: _biggerFont,
+            //style属性的值设为之前声明的biggerFont变量改变字号大小；step4
+          ),
+          subtitle: new Text('When will you come to my house ?'),
+          onTap: _onTap,
+          onLongPress: _onLongPress,
+        ),
+      ),
+    );
+  }
+
+  Widget _pageThree(){
+    return new Scaffold(
+      body: new Container(
+        color: Colors.white70,
+        child: new ListTile(
+          leading: Icon(
+            Icons.picture_in_picture,
+          ),
+          title: new Text(
+            'Ann',
+            //生成的单词对要进行大驼峰式命名法美化；step4
+            style: _biggerFont,
+            //style属性的值设为之前声明的biggerFont变量改变字号大小；step4
+          ),
+          subtitle: new Text('When will you come to my house ?'),
+          onTap: _onTap,
+          onLongPress: _onLongPress,
+        ),
+      ),
+    );
+  }
+
+  Widget _pageFour(){
+    return new Scaffold(
+      body: new Container(
+        color: Colors.white70,
+        child: new ListTile(
+          leading: Icon(
+            Icons.picture_in_picture,
+          ),
+          title: new Text(
+            'Ann',
+            //生成的单词对要进行大驼峰式命名法美化；step4
+            style: _biggerFont,
+            //style属性的值设为之前声明的biggerFont变量改变字号大小；step4
+          ),
+          subtitle: new Text('When will you come to my house ?'),
+          onTap: _onTap,
+          onLongPress: _onLongPress,
+        ),
+      ),
     );
   }
 
@@ -357,8 +448,8 @@ class PageOne extends State<PageCount>{
         //style属性的值设为之前声明的biggerFont变量改变字号大小；step4
       ),
       subtitle: new Text('Your friend $friendsName send you a message'),
-      //onTap: _onTap,
-      //onLongPress: _onLongPress,
+      onTap: _onTap,
+      onLongPress: _onLongPress,
     );
   }
 
@@ -370,39 +461,86 @@ class PageOne extends State<PageCount>{
           //在push调用中新建MaterialPageRoute 及其 builder（构造器）；
           return new Scaffold(
             appBar: new AppBar(
-              title: new Container(
-                child: new Row(
-                  //不知道为啥不显示；bug
-                  children: <Widget>[
-                    new TextField(
-                      keyboardType: TextInputType.text,
-                      controller: _controller,
-                      cursorColor: Colors.black,
-                      decoration: new InputDecoration(
-                        border: new OutlineInputBorder(  //添加边框
-                          gapPadding: 10.0,
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        hintText: 'Search...',
-                        suffixIcon: new IconButton(
-                          icon: new Icon(Icons.send),
-                          onPressed: (){
-                            showDialog(
-                                context: context,
-                                child: new AlertDialog(
-                                  content: new Text(_controller.text),
-                                )
-                            );
-                          },
-                        ),
-                        contentPadding: const EdgeInsets.all(15.0),
-                      ),
-                      //onSubmitted: ,
-                      textInputAction: TextInputAction.done,
-                    )
-                  ],
+              title: new GestureDetector(
+                child: new TextField(
+                  keyboardType: TextInputType.text,
+                  controller: _controller,
+                  cursorColor: Colors.black,
+                  decoration: new InputDecoration(
+                    border: new OutlineInputBorder(  //添加边框
+                      gapPadding: 10.0,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    hintText: 'Search...',
+                    suffixIcon: new IconButton(
+                      icon: new Icon(Icons.send),
+                      onPressed: (){
+                        showDialog(
+                            context: context,
+                            child: new AlertDialog(
+                              content: new Text(_controller.text),
+                            )
+                        );
+                      },
+                    ),
+                    contentPadding: const EdgeInsets.all(15.0),
+                  ),
+                  //onSubmitted: ,
+                  textInputAction: TextInputAction.done,
                 ),
               )
+              /*new Text(
+                'Search',
+                textAlign: TextAlign.left
+              ),*/
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _onTap(){
+    Navigator.of(context).push(
+      //表示添加在导航栏部分添加 Navigator.push 调用，实现路由入栈（以后路由入栈均指推入到导航管理器的栈）；step7
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context){
+          //在push调用中新建MaterialPageRoute 及其 builder（构造器）；
+          return new Scaffold(
+            appBar: new AppBar(
+                title: new Container(
+                  child: new Row(
+                    //不知道为啥不显示；bug
+                    children: <Widget>[
+                      new TextField(
+                        keyboardType: TextInputType.text,
+                        controller: _controller,
+                        cursorColor: Colors.black,
+                        decoration: new InputDecoration(
+                          border: new OutlineInputBorder(  //添加边框
+                            gapPadding: 10.0,
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          hintText: 'Search...',
+                          suffixIcon: new IconButton(
+                            icon: new Icon(Icons.send),
+                            onPressed: (){
+                              showDialog(
+                                  context: context,
+                                  child: new AlertDialog(
+                                    content: new Text(_controller.text),
+                                  )
+                              );
+                            },
+                          ),
+                          contentPadding: const EdgeInsets.all(15.0),
+                        ),
+                        //onSubmitted: ,
+                        textInputAction: TextInputAction.done,
+                      )
+                    ],
+                  ),
+                )
               /*new Text(
                 'Search...',
                 textAlign: TextAlign.left
@@ -433,10 +571,10 @@ class PageOne extends State<PageCount>{
                       icon: new Icon(Icons.send),
                       onPressed: (){
                         showDialog(
-                          context: context,
-                          child: new AlertDialog(
-                            content: new Text(_controller.text),
-                          )
+                            context: context,
+                            child: new AlertDialog(
+                              content: new Text(_controller.text),
+                            )
                         );
                       },
                     ),
@@ -453,4 +591,573 @@ class PageOne extends State<PageCount>{
       ),
     );
   }
+
+  void _onLongPress(){
+  }
+
+  void _turnToPage(int index){
+    switch(index){
+      case 0: _pageOne();
+      break;
+      case 1: _pageTwo();
+      break;
+      case 2: _pageThree();
+      break;
+      case 3: _pageFour();
+      break;
+      default: _pageOne();
+    }
+  }
+
+  void _onAnnTap(){
+    Navigator.of(context).push(
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return new Scaffold(
+            appBar: new AppBar(
+              title: new Text('Ann'),
+              actions: <Widget>[
+                new IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: _annInfo,
+                  alignment: Alignment.centerRight
+                )
+              ],
+            ),
+            bottomNavigationBar: new Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                new TextField(
+                  keyboardType: TextInputType.text,
+                  controller: _controller,
+                  cursorColor: Colors.black,
+                  decoration: new InputDecoration(
+                    border: new OutlineInputBorder(  //添加边框
+                      gapPadding: 10.0,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    hintText: 'Search...',
+                    suffixIcon: new IconButton(
+                      icon: new Icon(Icons.send),
+                      onPressed: (){
+                        showDialog(
+                            context: context,
+                            child: new AlertDialog(
+                              content: new Text(_controller.text),
+                            )
+                        );
+                      },
+                    ),
+                    contentPadding: const EdgeInsets.all(15.0),
+                  ),
+                  //onSubmitted: ,
+                  textInputAction: TextInputAction.done,
+                ),
+                new Divider(height: 24.0,color: Colors.white)
+              ],
+            ),
+          );
+        }
+      )
+    );
+  }
+
+  void _annInfo(){
+    Navigator.of(context).push(
+        new MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return new Scaffold(
+                appBar: new AppBar(
+                  title: new Text('Ann'),
+                  actions: <Widget>[
+                    new IconButton(
+                        icon: Icon(Icons.menu),
+                        onPressed: _annInfo,
+                        alignment: Alignment.centerRight
+                    )
+                  ],
+                ),
+                bottomNavigationBar: new Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    new TextField(
+                      keyboardType: TextInputType.text,
+                      controller: _controller,
+                      cursorColor: Colors.black,
+                      decoration: new InputDecoration(
+                        border: new OutlineInputBorder(  //添加边框
+                          gapPadding: 10.0,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        hintText: 'Search...',
+                        suffixIcon: new IconButton(
+                          icon: new Icon(Icons.send),
+                          onPressed: (){
+                            showDialog(
+                                context: context,
+                                child: new AlertDialog(
+                                  content: new Text(_controller.text),
+                                )
+                            );
+                          },
+                        ),
+                        contentPadding: const EdgeInsets.all(15.0),
+                      ),
+                      //onSubmitted: ,
+                      textInputAction: TextInputAction.done,
+                    ),
+                    new Divider(height: 24.0,color: Colors.white)
+                  ],
+                ),
+              );
+            }
+        )
+    );
+  }
+
+  void _toPageTwo(){
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+          builder: (BuildContext context){
+            return new Scaffold(
+              appBar: new AppBar(
+                title: new Text('UsChat(2)',textAlign: TextAlign.left),
+                //导航栏显示文字，设置靠左；
+
+                actions: <Widget>[
+                  new IconButton(
+                      icon: const Icon(Icons.search),
+                      iconSize: 16,
+                      onPressed: _onSearch,
+                      alignment: Alignment.centerRight
+                  ),
+                  new PopupMenuButton(
+                      icon: new Icon(Icons.add_circle,size: 16),
+                      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                        new PopupMenuItem(
+                          child: new Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              new IconButton(
+                                icon: new Icon(Icons.chat),
+                                //onPressed: ,
+                              ),
+                              new Divider(height: 0,indent: 5.0),
+                              new Text('New Chat')
+                            ],
+                          ),
+                        ),
+                        new PopupMenuItem(
+                          child: new Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              new IconButton(icon: new Icon(Icons.contacts)),
+                              new Divider(height: 0,indent: 5.0),
+                              new Text('Add Contacts')
+                            ],
+                          ),
+                        ),
+                        new PopupMenuItem(
+                          child: new Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              new IconButton(
+                                icon: new Icon(Icons.scanner),
+                                //onPressed: ,
+                              ),
+                              new Divider(height: 0,indent: 5.0),
+                              new Text('Scan')
+                            ],
+                          ),
+                        ),
+                        new PopupMenuItem(
+                          child: new Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              new IconButton(
+                                icon: new Icon(Icons.payment),
+                                //onPressed: ,
+                              ),
+                              new Divider(height: 0,indent: 5.0),
+                              new Text('Money')
+                            ],
+                          ),
+                        ),
+                        new PopupMenuItem(
+                          child: new Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              new IconButton(icon: new Icon(Icons.mail)),
+                              new Divider(height: 0,indent: 5.0),
+                              new Text('Support'),
+                            ],
+                          ),
+                        )
+                      ]
+                  )
+                ],
+              ),
+
+              body: new Container(
+
+              ),
+
+              bottomNavigationBar: new BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  items: <BottomNavigationBarItem>[
+                    new BottomNavigationBarItem(
+                      icon: new Icon(Icons.chat_bubble_outline,color: Colors.black,),
+                      activeIcon: new Icon(Icons.chat_bubble,color: Colors.green),
+                      title: new Text(
+                        'Chats',
+                        style: TextStyle(
+                            color: Colors.black
+                        ),
+                      ),
+                    ),
+                    new BottomNavigationBarItem(
+                        icon: new Icon(Icons.contacts,color: Colors.black),
+                        activeIcon: new Icon(Icons.contacts,color: Colors.green,),
+                        title: new Text(
+                          'Contacts',
+                          style: TextStyle(
+                              color: Colors.black
+                          ),
+                        )
+                    ),
+                    new BottomNavigationBarItem(
+                        icon: new Icon(Icons.star_border,color: Colors.black),
+                        activeIcon: new Icon(Icons.star,color: Colors.green),
+                        title: new Text(
+                          'Discover',
+                          style: TextStyle(
+                              color: Colors.black
+                          ),
+                        )
+                    ),
+                    new BottomNavigationBarItem(
+                        icon: new Icon(Icons.bookmark_border,color: Colors.black),
+                        activeIcon: new Icon(Icons.bookmark,color: Colors.green),
+                        title: new Text(
+                          'Me',
+                          style: TextStyle(
+                              color: Colors.black
+                          ),
+                        )
+                    )
+                  ],
+                  currentIndex: _selectIndex,
+                  onTap: (index) {
+                    setState(() {
+                      _selectIndex = index;
+                      while(_selectIndex != 0){
+                        _turnToPage(_selectIndex);//网页跳转
+                      }
+                    });
+                  },
+                  fixedColor: Colors.green
+              ),
+            );
+          }
+      )
+    );
+  }
+
+  void _toPageThree(){
+    Navigator.of(context).push(
+        new MaterialPageRoute(
+            builder: (BuildContext context){
+              return new Scaffold(
+                appBar: new AppBar(
+                  title: new Text('UsChat(2)',textAlign: TextAlign.left),
+                  //导航栏显示文字，设置靠左；
+
+                  actions: <Widget>[
+                    new IconButton(
+                        icon: const Icon(Icons.search),
+                        iconSize: 16,
+                        onPressed: _onSearch,
+                        alignment: Alignment.centerRight
+                    ),
+                    new PopupMenuButton(
+                        icon: new Icon(Icons.add_circle,size: 16),
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(
+                                  icon: new Icon(Icons.chat),
+                                  //onPressed: ,
+                                ),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('New Chat')
+                              ],
+                            ),
+                          ),
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(icon: new Icon(Icons.contacts)),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('Add Contacts')
+                              ],
+                            ),
+                          ),
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(
+                                  icon: new Icon(Icons.scanner),
+                                  //onPressed: ,
+                                ),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('Scan')
+                              ],
+                            ),
+                          ),
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(
+                                  icon: new Icon(Icons.payment),
+                                  //onPressed: ,
+                                ),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('Money')
+                              ],
+                            ),
+                          ),
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(icon: new Icon(Icons.mail)),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('Support'),
+                              ],
+                            ),
+                          )
+                        ]
+                    )
+                  ],
+                ),
+
+                body: new Container(
+
+                ),
+
+                bottomNavigationBar: new BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    items: <BottomNavigationBarItem>[
+                      new BottomNavigationBarItem(
+                        icon: new Icon(Icons.chat_bubble_outline,color: Colors.black,),
+                        activeIcon: new Icon(Icons.chat_bubble,color: Colors.green),
+                        title: new Text(
+                          'Chats',
+                          style: TextStyle(
+                              color: Colors.black
+                          ),
+                        ),
+                      ),
+                      new BottomNavigationBarItem(
+                          icon: new Icon(Icons.contacts,color: Colors.black),
+                          activeIcon: new Icon(Icons.contacts,color: Colors.green,),
+                          title: new Text(
+                            'Contacts',
+                            style: TextStyle(
+                                color: Colors.black
+                            ),
+                          )
+                      ),
+                      new BottomNavigationBarItem(
+                          icon: new Icon(Icons.star_border,color: Colors.black),
+                          activeIcon: new Icon(Icons.star,color: Colors.green),
+                          title: new Text(
+                            'Discover',
+                            style: TextStyle(
+                                color: Colors.black
+                            ),
+                          )
+                      ),
+                      new BottomNavigationBarItem(
+                          icon: new Icon(Icons.bookmark_border,color: Colors.black),
+                          activeIcon: new Icon(Icons.bookmark,color: Colors.green),
+                          title: new Text(
+                            'Me',
+                            style: TextStyle(
+                                color: Colors.black
+                            ),
+                          )
+                      )
+                    ],
+                    currentIndex: _selectIndex,
+                    onTap: (index) {
+                      setState(() {
+                        _selectIndex = index;
+                        while(_selectIndex != 0){
+                          _turnToPage(_selectIndex);//网页跳转
+                        }
+                      });
+                    },
+                    fixedColor: Colors.green
+                ),
+              );
+            }
+        )
+    );
+  }
+
+  void _toPageFour(){
+    Navigator.of(context).push(
+        new MaterialPageRoute(
+            builder: (BuildContext context){
+              return new Scaffold(
+                appBar: new AppBar(
+                  title: new Text('UsChat(2)',textAlign: TextAlign.left),
+                  //导航栏显示文字，设置靠左；
+
+                  actions: <Widget>[
+                    new IconButton(
+                        icon: const Icon(Icons.search),
+                        iconSize: 16,
+                        onPressed: _onSearch,
+                        alignment: Alignment.centerRight
+                    ),
+                    new PopupMenuButton(
+                        icon: new Icon(Icons.add_circle,size: 16),
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(
+                                  icon: new Icon(Icons.chat),
+                                  //onPressed: ,
+                                ),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('New Chat')
+                              ],
+                            ),
+                          ),
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(icon: new Icon(Icons.contacts)),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('Add Contacts')
+                              ],
+                            ),
+                          ),
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(
+                                  icon: new Icon(Icons.scanner),
+                                  //onPressed: ,
+                                ),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('Scan')
+                              ],
+                            ),
+                          ),
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(
+                                  icon: new Icon(Icons.payment),
+                                  //onPressed: ,
+                                ),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('Money')
+                              ],
+                            ),
+                          ),
+                          new PopupMenuItem(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new IconButton(icon: new Icon(Icons.mail)),
+                                new Divider(height: 0,indent: 5.0),
+                                new Text('Support'),
+                              ],
+                            ),
+                          )
+                        ]
+                    )
+                  ],
+                ),
+
+                body: new Container(
+
+                ),
+
+                bottomNavigationBar: new BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    items: <BottomNavigationBarItem>[
+                      new BottomNavigationBarItem(
+                        icon: new Icon(Icons.chat_bubble_outline,color: Colors.black,),
+                        activeIcon: new Icon(Icons.chat_bubble,color: Colors.green),
+                        title: new Text(
+                          'Chats',
+                          style: TextStyle(
+                              color: Colors.black
+                          ),
+                        ),
+                      ),
+                      new BottomNavigationBarItem(
+                          icon: new Icon(Icons.contacts,color: Colors.black),
+                          activeIcon: new Icon(Icons.contacts,color: Colors.green,),
+                          title: new Text(
+                            'Contacts',
+                            style: TextStyle(
+                                color: Colors.black
+                            ),
+                          )
+                      ),
+                      new BottomNavigationBarItem(
+                          icon: new Icon(Icons.star_border,color: Colors.black),
+                          activeIcon: new Icon(Icons.star,color: Colors.green),
+                          title: new Text(
+                            'Discover',
+                            style: TextStyle(
+                                color: Colors.black
+                            ),
+                          )
+                      ),
+                      new BottomNavigationBarItem(
+                          icon: new Icon(Icons.bookmark_border,color: Colors.black),
+                          activeIcon: new Icon(Icons.bookmark,color: Colors.green),
+                          title: new Text(
+                            'Me',
+                            style: TextStyle(
+                                color: Colors.black
+                            ),
+                          )
+                      )
+                    ],
+                    currentIndex: _selectIndex,
+                    onTap: (index) {
+                      setState(() {
+                        _selectIndex = index;
+                        while(_selectIndex != 0){
+                          _turnToPage(_selectIndex);//网页跳转
+                        }
+                      });
+                    },
+                    fixedColor: Colors.green
+                ),
+              );
+            }
+        )
+    );
+  }
+
+
 }
