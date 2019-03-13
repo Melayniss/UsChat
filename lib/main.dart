@@ -182,13 +182,17 @@ class PageOne extends State<PageCount>{
   final List<WordPair> _friends = <WordPair>[];
   final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
   final TextEditingController _controller = new TextEditingController();
+  String _pageName = '';
   int _selectIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('UsChat(2)',textAlign: TextAlign.left),
+        title: new Text(
+          '$_pageName',
+          textAlign: TextAlign.left
+        ),
         //导航栏显示文字，设置靠左；
 
         actions: <Widget>[
@@ -265,7 +269,7 @@ class PageOne extends State<PageCount>{
         ],
       ),
 
-      body: _pageOne(),
+      body: _whichPage(),
 
       bottomNavigationBar: new BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -315,7 +319,7 @@ class PageOne extends State<PageCount>{
         onTap: (index) {
           setState(() {
             _selectIndex = index;
-            _turnToPage(_selectIndex);//网页跳转
+            _whichPage();//网页跳转
           });
         },
         fixedColor: Colors.green
@@ -323,32 +327,95 @@ class PageOne extends State<PageCount>{
     );
   }
 
+  Widget _whichPage(){
+    switch(_selectIndex){
+      case 0: return _pageOne();
+      break;
+      case 1: return _pageTwo();
+      break;
+      case 2: return _pageThree();
+      break;
+      case 3: return _pageFour();
+      break;
+      default: return _pageOne();
+    }
+  }
+
   Widget _pageOne(){
+    _pageName = 'UsChat(3)';
+
     return new Scaffold(
       body: new Container(
         color: Colors.white70,
-        child: new Container(
-          child: new ListTile(
-            leading: Icon(
-              Icons.picture_in_picture,
+        child: new Column(
+          children: <Widget>[
+            new ListTile(
+              leading: Icon(
+                Icons.picture_in_picture,
+              ),
+              title: new Text(
+                'Ann',
+                style: _biggerFont,
+              ),
+              subtitle: new Text('When will you come to my house ?'),
+              trailing: new Text(
+                  'Yesterday 11:03',
+                  textAlign: TextAlign.center,
+                  style: new TextStyle(
+                      fontSize: 10.0,
+                      color: Colors.grey
+                  )
+              ),
+              onTap: _onAnnTap,
+              onLongPress: _onLongPress,
             ),
-            title: new Text(
-              'Ann',
-              style: _biggerFont,
-            ),
-            subtitle: new Text('When will you come to my house ?'),
-            trailing: new Text(
-              'Yesterday 11:03',
-              textAlign: TextAlign.center,
-              style: new TextStyle(
-                fontSize: 10.0,
-                color: Colors.grey
-              )
-            ),
-            onTap: _onAnnTap,
-            onLongPress: _onLongPress,
-          ),
 
+            new Divider(),
+
+            new ListTile(
+              leading: Icon(
+                Icons.picture_in_picture,
+              ),
+              title: new Text(
+                'Ann',
+                style: _biggerFont,
+              ),
+              subtitle: new Text('When will you come to my house ?'),
+              trailing: new Text(
+                  'Yesterday 11:03',
+                  textAlign: TextAlign.center,
+                  style: new TextStyle(
+                      fontSize: 10.0,
+                      color: Colors.grey
+                  )
+              ),
+              onTap: _onAnnTap,
+              onLongPress: _onLongPress,
+            ),
+
+            new Divider(),
+
+            new ListTile(
+              leading: Icon(
+                Icons.picture_in_picture,
+              ),
+              title: new Text(
+                'Ann',
+                style: _biggerFont,
+              ),
+              subtitle: new Text('When will you come to my house ?'),
+              trailing: new Text(
+                  'Yesterday 11:03',
+                  textAlign: TextAlign.center,
+                  style: new TextStyle(
+                      fontSize: 10.0,
+                      color: Colors.grey
+                  )
+              ),
+              onTap: _onAnnTap,
+              onLongPress: _onLongPress,
+            )
+          ],
         )
       ),
     );
@@ -371,6 +438,8 @@ class PageOne extends State<PageCount>{
   }
 
   Widget _pageTwo(){
+    _pageName = 'Contacts';
+
     return new Scaffold(
       body: new Container(
         color: Colors.white70,
@@ -393,6 +462,8 @@ class PageOne extends State<PageCount>{
   }
 
   Widget _pageThree(){
+    _pageName = 'Favorite';
+
     return new Scaffold(
       body: new Container(
         color: Colors.white70,
@@ -415,6 +486,8 @@ class PageOne extends State<PageCount>{
   }
 
   Widget _pageFour(){
+    _pageName = 'My Profile';
+
     return new Scaffold(
       body: new Container(
         color: Colors.white70,
@@ -489,10 +562,6 @@ class PageOne extends State<PageCount>{
                   textInputAction: TextInputAction.done,
                 ),
               )
-              /*new Text(
-                'Search',
-                textAlign: TextAlign.left
-              ),*/
             ),
           );
         },
@@ -595,20 +664,6 @@ class PageOne extends State<PageCount>{
   void _onLongPress(){
   }
 
-  void _turnToPage(int index){
-    switch(index){
-      case 0: _pageOne();
-      break;
-      case 1: _pageTwo();
-      break;
-      case 2: _pageThree();
-      break;
-      case 3: _pageFour();
-      break;
-      default: _pageOne();
-    }
-  }
-
   void _onAnnTap(){
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
@@ -619,11 +674,12 @@ class PageOne extends State<PageCount>{
               actions: <Widget>[
                 new IconButton(
                   icon: Icon(Icons.menu),
-                  onPressed: _annInfo,
+                  onPressed: _chatInfo,
                   alignment: Alignment.centerRight
                 )
               ],
             ),
+
             bottomNavigationBar: new Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -636,8 +692,39 @@ class PageOne extends State<PageCount>{
                       gapPadding: 10.0,
                       borderRadius: BorderRadius.circular(20.0),
                     ),
-                    hintText: 'Search...',
+                    hintText: 'Say something...',
                     suffixIcon: new IconButton(
+                      icon: new Icon(Icons.add_circle),
+                      onPressed: (){
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context){
+                            return new Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                new ListTile(
+                                  leading: new Icon(Icons.photo_camera),
+                                  title: new Text("Camera"),
+                                  /*onTap: () async {
+                                    imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
+                                    Navigator.pop(context);
+                                  },*/
+                                ),
+                                new ListTile(
+                                  leading: new Icon(Icons.photo_library),
+                                  title: new Text("Gallery"),
+                                  /*onTap: () async {
+                                    imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                    Navigator.pop(context);
+                                  },*/
+                                ),
+                              ],
+                            );
+                          }
+                        );
+                      },
+                    ),
+                    suffix: new IconButton(
                       icon: new Icon(Icons.send),
                       onPressed: (){
                         showDialog(
@@ -662,502 +749,85 @@ class PageOne extends State<PageCount>{
     );
   }
 
-  void _annInfo(){
+  void _chatInfo(){
     Navigator.of(context).push(
         new MaterialPageRoute<void>(
             builder: (BuildContext context) {
               return new Scaffold(
                 appBar: new AppBar(
-                  title: new Text('Ann'),
-                  actions: <Widget>[
-                    new IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: _annInfo,
-                        alignment: Alignment.centerRight
-                    )
-                  ],
-                ),
-                bottomNavigationBar: new Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    new TextField(
-                      keyboardType: TextInputType.text,
-                      controller: _controller,
-                      cursorColor: Colors.black,
-                      decoration: new InputDecoration(
-                        border: new OutlineInputBorder(  //添加边框
-                          gapPadding: 10.0,
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        hintText: 'Search...',
-                        suffixIcon: new IconButton(
-                          icon: new Icon(Icons.send),
-                          onPressed: (){
-                            showDialog(
-                                context: context,
-                                child: new AlertDialog(
-                                  content: new Text(_controller.text),
-                                )
-                            );
-                          },
-                        ),
-                        contentPadding: const EdgeInsets.all(15.0),
-                      ),
-                      //onSubmitted: ,
-                      textInputAction: TextInputAction.done,
-                    ),
-                    new Divider(height: 24.0,color: Colors.white)
-                  ],
-                ),
-              );
-            }
-        )
-    );
-  }
-
-  void _toPageTwo(){
-    Navigator.of(context).push(
-      new MaterialPageRoute(
-          builder: (BuildContext context){
-            return new Scaffold(
-              appBar: new AppBar(
-                title: new Text('UsChat(2)',textAlign: TextAlign.left),
-                //导航栏显示文字，设置靠左；
-
-                actions: <Widget>[
-                  new IconButton(
-                      icon: const Icon(Icons.search),
-                      iconSize: 16,
-                      onPressed: _onSearch,
-                      alignment: Alignment.centerRight
-                  ),
-                  new PopupMenuButton(
-                      icon: new Icon(Icons.add_circle,size: 16),
-                      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                        new PopupMenuItem(
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              new IconButton(
-                                icon: new Icon(Icons.chat),
-                                //onPressed: ,
-                              ),
-                              new Divider(height: 0,indent: 5.0),
-                              new Text('New Chat')
-                            ],
-                          ),
-                        ),
-                        new PopupMenuItem(
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              new IconButton(icon: new Icon(Icons.contacts)),
-                              new Divider(height: 0,indent: 5.0),
-                              new Text('Add Contacts')
-                            ],
-                          ),
-                        ),
-                        new PopupMenuItem(
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              new IconButton(
-                                icon: new Icon(Icons.scanner),
-                                //onPressed: ,
-                              ),
-                              new Divider(height: 0,indent: 5.0),
-                              new Text('Scan')
-                            ],
-                          ),
-                        ),
-                        new PopupMenuItem(
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              new IconButton(
-                                icon: new Icon(Icons.payment),
-                                //onPressed: ,
-                              ),
-                              new Divider(height: 0,indent: 5.0),
-                              new Text('Money')
-                            ],
-                          ),
-                        ),
-                        new PopupMenuItem(
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              new IconButton(icon: new Icon(Icons.mail)),
-                              new Divider(height: 0,indent: 5.0),
-                              new Text('Support'),
-                            ],
-                          ),
-                        )
-                      ]
-                  )
-                ],
-              ),
-
-              body: new Container(
-
-              ),
-
-              bottomNavigationBar: new BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  items: <BottomNavigationBarItem>[
-                    new BottomNavigationBarItem(
-                      icon: new Icon(Icons.chat_bubble_outline,color: Colors.black,),
-                      activeIcon: new Icon(Icons.chat_bubble,color: Colors.green),
-                      title: new Text(
-                        'Chats',
-                        style: TextStyle(
-                            color: Colors.black
-                        ),
-                      ),
-                    ),
-                    new BottomNavigationBarItem(
-                        icon: new Icon(Icons.contacts,color: Colors.black),
-                        activeIcon: new Icon(Icons.contacts,color: Colors.green,),
-                        title: new Text(
-                          'Contacts',
-                          style: TextStyle(
-                              color: Colors.black
-                          ),
-                        )
-                    ),
-                    new BottomNavigationBarItem(
-                        icon: new Icon(Icons.star_border,color: Colors.black),
-                        activeIcon: new Icon(Icons.star,color: Colors.green),
-                        title: new Text(
-                          'Discover',
-                          style: TextStyle(
-                              color: Colors.black
-                          ),
-                        )
-                    ),
-                    new BottomNavigationBarItem(
-                        icon: new Icon(Icons.bookmark_border,color: Colors.black),
-                        activeIcon: new Icon(Icons.bookmark,color: Colors.green),
-                        title: new Text(
-                          'Me',
-                          style: TextStyle(
-                              color: Colors.black
-                          ),
-                        )
-                    )
-                  ],
-                  currentIndex: _selectIndex,
-                  onTap: (index) {
-                    setState(() {
-                      _selectIndex = index;
-                      while(_selectIndex != 0){
-                        _turnToPage(_selectIndex);//网页跳转
-                      }
-                    });
-                  },
-                  fixedColor: Colors.green
-              ),
-            );
-          }
-      )
-    );
-  }
-
-  void _toPageThree(){
-    Navigator.of(context).push(
-        new MaterialPageRoute(
-            builder: (BuildContext context){
-              return new Scaffold(
-                appBar: new AppBar(
-                  title: new Text('UsChat(2)',textAlign: TextAlign.left),
-                  //导航栏显示文字，设置靠左；
-
-                  actions: <Widget>[
-                    new IconButton(
-                        icon: const Icon(Icons.search),
-                        iconSize: 16,
-                        onPressed: _onSearch,
-                        alignment: Alignment.centerRight
-                    ),
-                    new PopupMenuButton(
-                        icon: new Icon(Icons.add_circle,size: 16),
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(
-                                  icon: new Icon(Icons.chat),
-                                  //onPressed: ,
-                                ),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('New Chat')
-                              ],
-                            ),
-                          ),
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(icon: new Icon(Icons.contacts)),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('Add Contacts')
-                              ],
-                            ),
-                          ),
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(
-                                  icon: new Icon(Icons.scanner),
-                                  //onPressed: ,
-                                ),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('Scan')
-                              ],
-                            ),
-                          ),
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(
-                                  icon: new Icon(Icons.payment),
-                                  //onPressed: ,
-                                ),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('Money')
-                              ],
-                            ),
-                          ),
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(icon: new Icon(Icons.mail)),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('Support'),
-                              ],
-                            ),
-                          )
-                        ]
-                    )
-                  ],
+                  title: new Text('Chat Info'),
                 ),
 
                 body: new Container(
-
-                ),
-
-                bottomNavigationBar: new BottomNavigationBar(
-                    type: BottomNavigationBarType.fixed,
-                    items: <BottomNavigationBarItem>[
-                      new BottomNavigationBarItem(
-                        icon: new Icon(Icons.chat_bubble_outline,color: Colors.black,),
-                        activeIcon: new Icon(Icons.chat_bubble,color: Colors.green),
-                        title: new Text(
-                          'Chats',
-                          style: TextStyle(
-                              color: Colors.black
+                    color: Colors.white70,
+                    child: new Column(
+                      children: <Widget>[
+                        new ListTile(
+                          leading: Icon(
+                            Icons.picture_in_picture,
+                          ),
+                          title: new Text(
+                            'Ann',
+                            style: _biggerFont,
+                          ),
+                          subtitle: new Text('When will you come to my house ?'),
+                          trailing: new Text(
+                              'Yesterday 11:03',
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 10.0,
+                                  color: Colors.grey
+                              )
                           ),
                         ),
-                      ),
-                      new BottomNavigationBarItem(
-                          icon: new Icon(Icons.contacts,color: Colors.black),
-                          activeIcon: new Icon(Icons.contacts,color: Colors.green,),
-                          title: new Text(
-                            'Contacts',
-                            style: TextStyle(
-                                color: Colors.black
-                            ),
-                          )
-                      ),
-                      new BottomNavigationBarItem(
-                          icon: new Icon(Icons.star_border,color: Colors.black),
-                          activeIcon: new Icon(Icons.star,color: Colors.green),
-                          title: new Text(
-                            'Discover',
-                            style: TextStyle(
-                                color: Colors.black
-                            ),
-                          )
-                      ),
-                      new BottomNavigationBarItem(
-                          icon: new Icon(Icons.bookmark_border,color: Colors.black),
-                          activeIcon: new Icon(Icons.bookmark,color: Colors.green),
-                          title: new Text(
-                            'Me',
-                            style: TextStyle(
-                                color: Colors.black
-                            ),
-                          )
-                      )
-                    ],
-                    currentIndex: _selectIndex,
-                    onTap: (index) {
-                      setState(() {
-                        _selectIndex = index;
-                        while(_selectIndex != 0){
-                          _turnToPage(_selectIndex);//网页跳转
-                        }
-                      });
-                    },
-                    fixedColor: Colors.green
-                ),
-              );
-            }
-        )
-    );
-  }
 
-  void _toPageFour(){
-    Navigator.of(context).push(
-        new MaterialPageRoute(
-            builder: (BuildContext context){
-              return new Scaffold(
-                appBar: new AppBar(
-                  title: new Text('UsChat(2)',textAlign: TextAlign.left),
-                  //导航栏显示文字，设置靠左；
+                        new Divider(),
 
-                  actions: <Widget>[
-                    new IconButton(
-                        icon: const Icon(Icons.search),
-                        iconSize: 16,
-                        onPressed: _onSearch,
-                        alignment: Alignment.centerRight
-                    ),
-                    new PopupMenuButton(
-                        icon: new Icon(Icons.add_circle,size: 16),
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(
-                                  icon: new Icon(Icons.chat),
-                                  //onPressed: ,
-                                ),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('New Chat')
-                              ],
-                            ),
+                        new ListTile(
+                          leading: Icon(
+                            Icons.picture_in_picture,
                           ),
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(icon: new Icon(Icons.contacts)),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('Add Contacts')
-                              ],
-                            ),
+                          title: new Text(
+                            'Ann',
+                            style: _biggerFont,
                           ),
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(
-                                  icon: new Icon(Icons.scanner),
-                                  //onPressed: ,
-                                ),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('Scan')
-                              ],
-                            ),
+                          subtitle: new Text('When will you come to my house ?'),
+                          trailing: new Text(
+                              'Yesterday 11:03',
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 10.0,
+                                  color: Colors.grey
+                              )
                           ),
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(
-                                  icon: new Icon(Icons.payment),
-                                  //onPressed: ,
-                                ),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('Money')
-                              ],
-                            ),
+                        ),
+
+                        new Divider(),
+
+                        new ListTile(
+                          leading: Icon(
+                            Icons.picture_in_picture,
                           ),
-                          new PopupMenuItem(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new IconButton(icon: new Icon(Icons.mail)),
-                                new Divider(height: 0,indent: 5.0),
-                                new Text('Support'),
-                              ],
-                            ),
-                          )
-                        ]
+                          title: new Text(
+                            'Ann',
+                            style: _biggerFont,
+                          ),
+                          subtitle: new Text('When will you come to my house ?'),
+                          trailing: new Text(
+                              'Yesterday 11:03',
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 10.0,
+                                  color: Colors.grey
+                              )
+                          ),
+                        )
+                      ],
                     )
-                  ],
-                ),
-
-                body: new Container(
-
-                ),
-
-                bottomNavigationBar: new BottomNavigationBar(
-                    type: BottomNavigationBarType.fixed,
-                    items: <BottomNavigationBarItem>[
-                      new BottomNavigationBarItem(
-                        icon: new Icon(Icons.chat_bubble_outline,color: Colors.black,),
-                        activeIcon: new Icon(Icons.chat_bubble,color: Colors.green),
-                        title: new Text(
-                          'Chats',
-                          style: TextStyle(
-                              color: Colors.black
-                          ),
-                        ),
-                      ),
-                      new BottomNavigationBarItem(
-                          icon: new Icon(Icons.contacts,color: Colors.black),
-                          activeIcon: new Icon(Icons.contacts,color: Colors.green,),
-                          title: new Text(
-                            'Contacts',
-                            style: TextStyle(
-                                color: Colors.black
-                            ),
-                          )
-                      ),
-                      new BottomNavigationBarItem(
-                          icon: new Icon(Icons.star_border,color: Colors.black),
-                          activeIcon: new Icon(Icons.star,color: Colors.green),
-                          title: new Text(
-                            'Discover',
-                            style: TextStyle(
-                                color: Colors.black
-                            ),
-                          )
-                      ),
-                      new BottomNavigationBarItem(
-                          icon: new Icon(Icons.bookmark_border,color: Colors.black),
-                          activeIcon: new Icon(Icons.bookmark,color: Colors.green),
-                          title: new Text(
-                            'Me',
-                            style: TextStyle(
-                                color: Colors.black
-                            ),
-                          )
-                      )
-                    ],
-                    currentIndex: _selectIndex,
-                    onTap: (index) {
-                      setState(() {
-                        _selectIndex = index;
-                        while(_selectIndex != 0){
-                          _turnToPage(_selectIndex);//网页跳转
-                        }
-                      });
-                    },
-                    fixedColor: Colors.green
                 ),
               );
             }
         )
     );
   }
-
-
 }
